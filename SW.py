@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+import tracemalloc
 
 #// scores from https://gist.github.com/radaniba/11019717
 def smith_waterman(seq1, seq2, match_score=2, mismatch_penalty=-1, gap_penalty=-1):
@@ -71,6 +73,8 @@ def visualize_matrix(matrix):
     plt.show()
 
 def main():
+    tracemalloc.start()
+    start = time.time()
     seq1 = "AGTACGCA"
     seq2 = "TATGC"
     alignment1, alignment2, score = smith_waterman(seq1, seq2)
@@ -83,6 +87,11 @@ def main():
     for i in range(len(seq2) + 1):
         for j in range(len(seq1) + 1):
             score_matrix[i][j] = smith_waterman(seq1[:j], seq2[:i])[2]
+        
+    end = time.time()
+    mem = tracemalloc.get_traced_memory()
+    print(f"Time = {end-start}")
+    print(f"Memory = {mem[0]}")
 
     visualize_matrix(score_matrix)
 
