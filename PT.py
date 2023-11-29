@@ -39,6 +39,7 @@ def main():
             distance_matrix[j][i] = distance
 
     #// Perform hierarchical clustering (UPGMA)
+    #// Inspiration from https://www.researchgate.net/figure/Phylogenetic-tree-using-UPGMA-method_fig1_325228699 
     link = hierarchy.linkage(distance_matrix, method='average')
     end = time.time()
     mem = tracemalloc.get_traced_memory()
