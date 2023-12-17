@@ -48,7 +48,7 @@ def main():
 
     #// Plot the phylogenetic tree
     #// https://codinginfinite.com/plot-dendrogram-in-python/
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(8, 6),num="Smith-Waterman")
     dendrogram = hierarchy.dendrogram(link, labels=sequences, leaf_rotation=-75, leaf_font_size=6)
     plt.xlabel('Sequence Index')
     plt.ylabel('Distance')

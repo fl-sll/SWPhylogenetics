@@ -36,7 +36,7 @@ def main():
             distance_matrix[i][j] = distance
             distance_matrix[j][i] = distance
 
-     #// Perform hierarchical clustering (UPGMA)
+    #// Perform hierarchical clustering (UPGMA)
     #// Inspiration from https://www.researchgate.net/figure/Phylogenetic-tree-using-UPGMA-method_fig1_325228699 
     link = linkage(distance_matrix, method='average')
     end = time.time()
@@ -46,7 +46,7 @@ def main():
 
     #// Plot the phylogenetic tree
     #// https://codinginfinite.com/plot-dendrogram-in-python/
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(8,6), num="Needleman-Wunsch")
     PT = dendrogram(link, labels=sequences, leaf_rotation=-75, leaf_font_size=6)
     plt.xlabel("Sequence Index")
     plt.ylabel("Distance")
