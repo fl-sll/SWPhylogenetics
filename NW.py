@@ -1,10 +1,7 @@
-from Bio import Entrez
-from Bio import SeqIO
 from Bio import pairwise2
 import matplotlib.pyplot as plt
 import tracemalloc
 import time
-import pylab
 from scipy.cluster.hierarchy import linkage, dendrogram
 import numpy as np
 
