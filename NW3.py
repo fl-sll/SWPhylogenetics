@@ -176,6 +176,7 @@ for i in range(num_seqs):
 for i in alignment:
     aligns.append(i[1])
         
+aligns.insert(0, alignment[0][0])
 # ml = 0
 
 # for i in aligns:
