@@ -6,8 +6,6 @@ def align_global(seqi, seqii, match, mismatch, open_gap, gap):
     ni = len(seqi)
     nii = len(seqii)
 
-    # initialization of NW matrix
-
     M = np.zeros((ni + 1, nii + 1))
     M[0, 1] += open_gap
     M[1, 0] += open_gap
@@ -15,8 +13,7 @@ def align_global(seqi, seqii, match, mismatch, open_gap, gap):
     M[1:, 0] = np.linspace(-2, -2 + (ni - 1) * gap, ni)
     M[0, 1:] = np.linspace(-2, -2 + (nii - 1) * gap, nii)
 
-    # Compute the NeeW matrix
-
+    #// Compute the NeeW matrix
     for i in range(1, ni + 1):
         for j in range(1, nii + 1):
             diag = M[i - 1, j - 1]
@@ -28,8 +25,7 @@ def align_global(seqi, seqii, match, mismatch, open_gap, gap):
             M[i, j] = max([diag, ver, hor])
     
 
-    # Find the optimal alignment
-
+    #// Find the optimal alignment
     al_seqi = []
     al_seqii = []
     al_seqi.append(seqi[-1])
@@ -77,12 +73,9 @@ def align_local(seqi, seqii, match, mismatch, open_gap, gap):
     ni = len(seqi)
     nii = len(seqii)
 
-    # Initialize the Smith-Waterman matrix
-
     M = np.zeros((ni + 1, nii + 1))
 
-    # Compute the Smith-Waterman matrix
-
+    #// Compute the Smith-Waterman matrix
     for i in range(1, ni + 1):
         for j in range(1, nii + 1):
             diag = M[i - 1, j - 1]
@@ -93,7 +86,7 @@ def align_local(seqi, seqii, match, mismatch, open_gap, gap):
             hor += open_gap if (j == 1) else gap
             M[i, j] = max([diag, ver, hor, 0])
 
-    # Find the optimal local alignment
+    #// Find the optimal local alignment
     i, j = np.unravel_index(M.argmax(), M.shape)
     al_seqi = []
     al_seqii = []
@@ -133,12 +126,6 @@ def align(seqi, seqii, alignment_type = 'global', match = 2, mismatch = -1, open
     seqi = np.array(list(seqi))
     seqii = np.array(list(seqii))
 
-
-    # substitution matrix
-
-    # matrix = [[2, -6, -6, -6], [-6, 2, -6, -6], 
-    #           [-6, -6, 2, -6], [-6, -6, -6, 2]]
-
     if alignment_type == 'local':
         return align_local(seqi, seqii, match, mismatch, open_gap, gap)
     elif alignment_type == 'global':
@@ -146,63 +133,43 @@ def align(seqi, seqii, alignment_type = 'global', match = 2, mismatch = -1, open
     else:
         raise ValueError('Invalid alignment type: {}'.format(alignment_type))
 
-# seq1 = 'CACACAGTGACTAGCTAGCTACGATC'
-# seq2 = 'CACACAGTCGACTAGCTAGCACGATC'
 
-sequences = [
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-            "AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA",
-            "AAAAAAAAAAAAAAAAAAAAAAACGAAAAAAAAAAAAAAAAAAAAAAA",
-            "AAAAAAAAAAAAAAAAAAAAAAATAAAAAAAAAAAAAAA",
-            "AAAAAAAAAAAAAAAAAAAAAAATTAAAAAAAAAAAAAAAAAAAAAAA"
-]
+def main():
+    sequences = [
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA",
+                "AAAAAAAAAAAAAAAAAAAAAAACGAAAAAAAAAAAAAAAAAAAAAAA",
+                "AAAAAAAAAAAAAAAAAAAAAAATAAAAAAAAAAAAAAA",
+                "AAAAAAAAAAAAAAAAAAAAAAATTAAAAAAAAAAAAAAAAAAAAAAA"
+    ]
 
-num_seqs = len(sequences)
-alignment = []
-al_seqs = len(alignment)
-aligns = []
-aligned = []
+    num_seqs = len(sequences)
+    alignment = []
+    al_seqs = len(alignment)
+    aligns = []
+    aligned = []
 
-# for i in range(num_seqs):
-#     for j in range(i + 1, num_seqs):
-#         alignment.append(align(sequences[i], sequences[j], 'global'))
+    for i in range(num_seqs):
+        for j in range(i + 1, num_seqs):
+            alignment.append(align(sequences[i], sequences[j], 'local'))
 
-for i in range(num_seqs):
-    for j in range(i + 1, num_seqs):
-        alignment.append(align(sequences[i], sequences[j], 'local'))
-
-# print(alignment[0][0])
-
-for i in alignment:
-    aligns.append(i[1])
+    for i in alignment:
+        aligns.append(i[1])
         
-aligns.insert(0, alignment[0][0])
-# ml = 0
+    ml = 0
+    for i in aligns:
+        if len(i) > ml:
+            ml = len(i)
+        
+    for i in aligns:
+        if len(i) < ml:
+            aligned.append(i + "-" * (ml - len(i)))
+        else:
+            aligned.append(i)
 
-# for i in aligns:
-#     if len(i) > ml:
-#         ml = len(i)
+    aligned = list(dict.fromkeys(aligned))
+        
+    for i in aligned:
+        print(i)
 
-# for i in aligns:
-#     if len(i) < ml:
-#         aligned.append(i + "-" * (ml - len(i)))
-    
-ml = 0
-for i in aligns:
-    if len(i) > ml:
-        ml = len(i)
-    
-for i in aligns:
-    if len(i) < ml:
-        aligned.append(i + "-" * (ml - len(i)))
-    else:
-        aligned.append(i)
-
-aligned = list(dict.fromkeys(aligned))
-    
-for i in aligned:
-    print(i)
-
-
-
-# print(*align(seq1, seq2, 'global'), sep='\n')
+main()
