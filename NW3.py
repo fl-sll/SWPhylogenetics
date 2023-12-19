@@ -174,7 +174,7 @@ for i in range(num_seqs):
 # print(alignment[0][0])
 
 for i in alignment:
-    aligns.append(i[0])
+    aligns.append(i[1])
         
 ml = 0
 
