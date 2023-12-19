@@ -176,15 +176,28 @@ for i in range(num_seqs):
 for i in alignment:
     aligns.append(i[1])
         
-ml = 0
+# ml = 0
 
+# for i in aligns:
+#     if len(i) > ml:
+#         ml = len(i)
+
+# for i in aligns:
+#     if len(i) < ml:
+#         aligned.append(i + "-" * (ml - len(i)))
+    
+ml = 0
 for i in aligns:
     if len(i) > ml:
         ml = len(i)
-
+    
 for i in aligns:
     if len(i) < ml:
         aligned.append(i + "-" * (ml - len(i)))
+    else:
+        aligned.append(i)
+
+aligned = list(dict.fromkeys(aligned))
     
 for i in aligned:
     print(i)
